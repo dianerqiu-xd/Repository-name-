@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 7 语言模型训练与对比分析平台 - 实验报告</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1d2433;
+      --muted: #526079;
+      --line: #dbe3ef;
+      --accent: #1463ff;
+      --ok: #0f9d58;
+      --warn: #d97706;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, #eef3ff 0%, #f7fbff 45%, #f2f8f5 100%);
+    }
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .hero {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 6px 18px rgba(18, 35, 62, 0.06);
+    }
+    h1, h2, h3 { margin: 0 0 12px; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 21px; margin-top: 18px; }
+    p, li { color: var(--muted); line-height: 1.7; }
+    .grid {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 5px 14px rgba(18, 35, 62, 0.04);
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--accent);
+      margin-bottom: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #f6f9ff; color: #26314a; }
+    .ok { color: var(--ok); font-weight: 600; }
+    .warn { color: var(--warn); font-weight: 600; }
+    .footer {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>📘 Week 7 语言模型训练与对比分析平台</h1>
+      <p>本报告对应 Streamlit 作业系统，覆盖统计语言模型、RNN 训练、预训练模型对比与困惑度评估四个模块。</p>
+      <table>
+        <tr><th>姓名/学号</th><td>（请填写）</td><th>实验日期</th><td>2026-04-15</td></tr>
+        <tr><th>AI 工具</th><td>Codex</td><th>LLM</th><td>GPT-5.4</td></tr>
+      </table>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <div class="badge">模块 1</div>
+        <h3>n-gram 与 Add-one Smoothing</h3>
+        <ul>
+          <li>构建 Bigram/Trigram/4-gram 统计模型</li>
+          <li>计算输入句子的联合概率</li>
+          <li>切换平滑后观察零概率问题缓解</li>
+        </ul>
+        <p><span class="warn">待填写：</span>未平滑概率、平滑后概率、现象解释。</p>
+      </section>
+
+      <section class="card">
+        <div class="badge">模块 2</div>
+        <h3>字符级 RNN/LSTM 训练</h3>
+        <ul>
+          <li>可调 Hidden Size / Epochs / Learning Rate</li>
+          <li>训练过程实时展示 Loss 曲线</li>
+          <li>根据 Seed 生成连续文本</li>
+        </ul>
+        <p><span class="warn">待填写：</span>不同超参数下 Loss 下降对比与文本质量对比。</p>
+      </section>
+
+      <section class="card">
+        <div class="badge">模块 3</div>
+        <h3>BERT vs GPT-2 机制对比</h3>
+        <ul>
+          <li>BERT：输入含 [MASK]，输出 Top-5 候选词概率</li>
+          <li>GPT-2：输入 Prompt，自回归续写文本</li>
+          <li>直观对比双向建模与单向建模差异</li>
+        </ul>
+        <p><span class="warn">待填写：</span>各自测试样例与输出结果。</p>
+      </section>
+
+      <section class="card">
+        <div class="badge">模块 4</div>
+        <h3>PPL 困惑度计算</h3>
+        <ul>
+          <li>基于 GPT-2 计算 Cross-Entropy Loss</li>
+          <li>按公式 PPL = exp(Loss) 输出得分</li>
+          <li>比较通顺句与乱码句 PPL 差异</li>
+        </ul>
+        <p><span class="ok">预期：</span>通顺句 PPL 更低，乱码句 PPL 更高。</p>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:16px;">
+      <h2>结论（填写区）</h2>
+      <p>
+        统计模型可解释性强但稀疏性明显；RNN 能学习局部序列规律但训练成本较高；
+        预训练模型泛化能力更强，在补全与生成任务上表现更稳定。困惑度结果可用于定量比较句子对模型的“可预测性”。
+      </p>
+    </section>
+
+    <p class="footer">
+      核心代码文件：<code>week7_lm_platform.py</code>；
+      运行命令：<code>streamlit run week7_lm_platform.py</code>
+    </p>
+  </div>
+</body>
+</html>
+
