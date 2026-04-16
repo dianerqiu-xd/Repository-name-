@@ -3,64 +3,42 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Week 7 语言模型训练与对比分析平台 - 实验报告</title>
+  <title>Week 7 实验报告 - 语言模型训练与对比分析平台</title>
   <style>
     :root {
-      --bg: #f4f7fb;
+      --bg: #f2f6fb;
       --card: #ffffff;
-      --text: #1d2433;
-      --muted: #526079;
-      --line: #dbe3ef;
-      --accent: #1463ff;
-      --ok: #0f9d58;
-      --warn: #d97706;
+      --line: #dbe4ef;
+      --text: #1f2a3d;
+      --muted: #596a84;
+      --brand: #1861ff;
+      --ok: #0a8f52;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(140deg, #eef4ff 0%, #f8fbff 45%, #f1f8f4 100%);
       color: var(--text);
-      background: linear-gradient(135deg, #eef3ff 0%, #f7fbff 45%, #f2f8f5 100%);
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
     }
-    .container {
+    .wrap {
       max-width: 1080px;
       margin: 0 auto;
       padding: 24px;
-    }
-    .hero {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 6px 18px rgba(18, 35, 62, 0.06);
-    }
-    h1, h2, h3 { margin: 0 0 12px; }
-    h1 { font-size: 28px; }
-    h2 { font-size: 21px; margin-top: 18px; }
-    p, li { color: var(--muted); line-height: 1.7; }
-    .grid {
-      margin-top: 16px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
     }
     .card {
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: 14px;
-      padding: 16px;
-      box-shadow: 0 5px 14px rgba(18, 35, 62, 0.04);
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 7px 18px rgba(18, 37, 64, 0.05);
     }
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #fff;
-      background: var(--accent);
-      margin-bottom: 8px;
-    }
+    h1, h2, h3 { margin: 0 0 10px; }
+    h1 { font-size: 29px; }
+    h2 { font-size: 22px; margin-top: 4px; }
+    h3 { font-size: 18px; margin-top: 6px; }
+    p, li { color: var(--muted); line-height: 1.7; }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -73,89 +51,218 @@
       text-align: left;
       vertical-align: top;
     }
-    th { background: #f6f9ff; color: #26314a; }
-    .ok { color: var(--ok); font-weight: 600; }
-    .warn { color: var(--warn); font-weight: 600; }
-    .footer {
-      margin-top: 16px;
+    th { background: #f4f8ff; color: #2a3a55; width: 22%; }
+    .top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border: none;
+      border-radius: 10px;
+      background: var(--brand);
+      color: #fff;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .pill {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--brand);
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .shots {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    figure {
+      margin: 0;
+    }
+    figure img {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+    figcaption {
+      margin-top: 6px;
       color: var(--muted);
       font-size: 13px;
+    }
+    pre {
+      white-space: pre-wrap;
+      background: #f5f8ff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      color: #32435d;
+      line-height: 1.65;
+      overflow-x: auto;
+      margin: 0;
+    }
+    a { color: var(--brand); text-decoration: none; }
+    .ok { color: var(--ok); font-weight: 600; }
+    .miss {
+      margin-top: 6px;
+      color: #b42318;
+      font-size: 13px;
+      display: none;
     }
     @media (max-width: 900px) {
       .grid { grid-template-columns: 1fr; }
     }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #fff; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <section class="hero">
-      <h1>📘 Week 7 语言模型训练与对比分析平台</h1>
-      <p>本报告对应 Streamlit 作业系统，覆盖统计语言模型、RNN 训练、预训练模型对比与困惑度评估四个模块。</p>
+  <div class="wrap">
+    <section class="card">
+      <div class="top">
+        <div>
+          <h1>📘 Week 7 语言模型训练与对比分析平台</h1>
+          <p>Streamlit + nltk + torch + transformers 综合实验报告</p>
+        </div>
+        <div class="no-print">
+          <button class="btn" onclick="window.print()">下载 PDF（浏览器打印）</button>
+        </div>
+      </div>
       <table>
-        <tr><th>姓名/学号</th><td>（请填写）</td><th>实验日期</th><td>2026-04-15</td></tr>
-        <tr><th>AI 工具</th><td>Codex</td><th>LLM</th><td>GPT-5.4</td></tr>
+        <tr><th>报告人姓名</th><td>裘典儿</td><th>学号</th><td>2025213456</td></tr>
+        <tr><th>实验日期</th><td>2026-04-16</td><th>工具/模型</th><td>Codex（GPT-5.4）</td></tr>
+        <tr><th>线上地址</th><td colspan="3"><a href="https://qiudianer-o56yrlk6wndom2xigbeh8k.streamlit.app/" target="_blank">https://qiudianer-o56yrlk6wndom2xigbeh8k.streamlit.app/</a></td></tr>
       </table>
     </section>
 
-    <div class="grid">
-      <section class="card">
-        <div class="badge">模块 1</div>
-        <h3>n-gram 与 Add-one Smoothing</h3>
-        <ul>
-          <li>构建 Bigram/Trigram/4-gram 统计模型</li>
-          <li>计算输入句子的联合概率</li>
-          <li>切换平滑后观察零概率问题缓解</li>
-        </ul>
-        <p><span class="warn">待填写：</span>未平滑概率、平滑后概率、现象解释。</p>
-      </section>
-
-      <section class="card">
-        <div class="badge">模块 2</div>
-        <h3>字符级 RNN/LSTM 训练</h3>
-        <ul>
-          <li>可调 Hidden Size / Epochs / Learning Rate</li>
-          <li>训练过程实时展示 Loss 曲线</li>
-          <li>根据 Seed 生成连续文本</li>
-        </ul>
-        <p><span class="warn">待填写：</span>不同超参数下 Loss 下降对比与文本质量对比。</p>
-      </section>
-
-      <section class="card">
-        <div class="badge">模块 3</div>
-        <h3>BERT vs GPT-2 机制对比</h3>
-        <ul>
-          <li>BERT：输入含 [MASK]，输出 Top-5 候选词概率</li>
-          <li>GPT-2：输入 Prompt，自回归续写文本</li>
-          <li>直观对比双向建模与单向建模差异</li>
-        </ul>
-        <p><span class="warn">待填写：</span>各自测试样例与输出结果。</p>
-      </section>
-
-      <section class="card">
-        <div class="badge">模块 4</div>
-        <h3>PPL 困惑度计算</h3>
-        <ul>
-          <li>基于 GPT-2 计算 Cross-Entropy Loss</li>
-          <li>按公式 PPL = exp(Loss) 输出得分</li>
-          <li>比较通顺句与乱码句 PPL 差异</li>
-        </ul>
-        <p><span class="ok">预期：</span>通顺句 PPL 更低，乱码句 PPL 更高。</p>
-      </section>
-    </div>
-
-    <section class="card" style="margin-top:16px;">
-      <h2>结论（填写区）</h2>
-      <p>
-        统计模型可解释性强但稀疏性明显；RNN 能学习局部序列规律但训练成本较高；
-        预训练模型泛化能力更强，在补全与生成任务上表现更稳定。困惑度结果可用于定量比较句子对模型的“可预测性”。
-      </p>
+    <section class="card">
+      <h2>四模块实现概览</h2>
+      <div class="grid">
+        <div>
+          <div class="pill">模块 1</div>
+          <h3>n-gram 与 Add-one Smoothing</h3>
+          <p>支持 Reuters/手动语料，支持 2/3/4-gram，计算句子联合概率并展示平滑前后差异。</p>
+        </div>
+        <div>
+          <div class="pill">模块 2</div>
+          <h3>Train your own RNN-LM</h3>
+          <p>字符级 RNN/LSTM，自定义语料与超参数，训练过程动态 Loss 曲线，训练后按 Seed 生成文本。</p>
+        </div>
+        <div>
+          <div class="pill">模块 3</div>
+          <h3>Masked LM vs Causal LM</h3>
+          <p>BERT 完成 [MASK] Top-5 预测；GPT-2 完成前缀续写，直观对比双向建模与单向自回归。</p>
+        </div>
+        <div>
+          <div class="pill">模块 4</div>
+          <h3>PPL 困惑度计算</h3>
+          <p>基于 GPT-2 计算 Cross-Entropy Loss，并输出 PPL=exp(loss) 表格。</p>
+        </div>
+      </div>
     </section>
 
-    <p class="footer">
-      核心代码文件：<code>week7_lm_platform.py</code>；
-      运行命令：<code>streamlit run week7_lm_platform.py</code>
-    </p>
+    <section class="card">
+      <h2>实验观察结论</h2>
+      <p>1. 未见 n-gram 在未平滑模型中会导致联合概率归零；加一平滑后概率可恢复为非零。<br/>
+      2. 规律文本训练时，RNN/LSTM 的 Loss 会持续下降，生成文本可复现输入模式。<br/>
+      3. BERT 可利用双向上下文完成填空，GPT-2 严格遵循左到右续写。<br/>
+      4. 通顺句通常拥有更低 PPL，随机乱码句通常拥有更高 PPL。<span class="ok">该现象与课程结论一致。</span></p>
+    </section>
+
+    <section class="card">
+      <h2>运行截图（模块对应）</h2>
+      <div class="shots">
+        <figure>
+          <img
+            src="./assets/week7_module1.png"
+            alt="模块1 n-gram 与加一平滑截图"
+            data-candidates="./assets/week7_module1.png|./week7_module1.png|./assets/module1.png|./module1.png|./assets/模块1.png|./模块1.png|./assets/week7_module1.jpg|./week7_module1.jpg"
+          />
+          <figcaption>图1：模块1（n-gram 与加一平滑）运行结果</figcaption>
+          <div class="miss">未找到截图文件：请放置 `assets/week7_module1.png`</div>
+        </figure>
+        <figure>
+          <img
+            src="./assets/week7_module2.png"
+            alt="模块2 字符级 RNN 训练截图"
+            data-candidates="./assets/week7_module2.png|./week7_module2.png|./assets/module2.png|./module2.png|./assets/模块2.png|./模块2.png|./assets/week7_module2.jpg|./week7_module2.jpg"
+          />
+          <figcaption>图2：模块2（Train your own RNN-LM）训练与生成结果</figcaption>
+          <div class="miss">未找到截图文件：请放置 `assets/week7_module2.png`</div>
+        </figure>
+        <figure>
+          <img
+            src="./assets/week7_module3.png"
+            alt="模块3 BERT GPT-2 对比截图"
+            data-candidates="./assets/week7_module3.png|./week7_module3.png|./assets/module3.png|./module3.png|./assets/模块3.png|./模块3.png|./assets/week7_module3.jpg|./week7_module3.jpg"
+          />
+          <figcaption>图3：模块3（Masked LM vs Causal LM）对比结果</figcaption>
+          <div class="miss">未找到截图文件：请放置 `assets/week7_module3.png`</div>
+        </figure>
+        <figure>
+          <img
+            src="./assets/week7_module4.png"
+            alt="模块4 PPL 计算截图"
+            data-candidates="./assets/week7_module4.png|./week7_module4.png|./assets/module4.png|./module4.png|./assets/模块4.png|./模块4.png|./assets/week7_module4.jpg|./week7_module4.jpg"
+          />
+          <figcaption>图4：模块4（Perplexity）计算结果</figcaption>
+          <div class="miss">未找到截图文件：请放置 `assets/week7_module4.png`</div>
+        </figure>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>本实验使用的 Prompt（核心）</h2>
+      <pre>请基于 Streamlit 构建“语言模型训练与对比分析平台”，包含四个标签页：
+1) n-gram 与 Add-one Smoothing：可输入语料，构建 Trigram/Bigram，计算句子联合概率并对比平滑前后结果；
+2) 从零训练字符级 RNN/LSTM：支持 Hidden Size、Epochs、Learning Rate 调参，实时显示 Loss 曲线，并基于 Seed 生成文本；
+3) 预训练模型对比：使用 bert-base-uncased 完成 [MASK] Top-5 预测，使用 gpt2 执行前缀续写；
+4) PPL 计算：基于 GPT-2 计算多句文本的 Cross-Entropy Loss 与 PPL=exp(Loss)，表格展示结果。</pre>
+    </section>
+
+    <section class="card">
+      <h2>提交文件</h2>
+      <p>核心代码：<code>app.py</code>；网页报告：<code>Week7_实验报告_可视化.html</code>；文本报告：<code>Week7_实验报告.md</code>；依赖：<code>requirements.txt</code>。</p>
+    </section>
   </div>
+  <script>
+    (function () {
+      const imgs = document.querySelectorAll("img[data-candidates]");
+      imgs.forEach((img) => {
+        const candidates = (img.getAttribute("data-candidates") || "")
+          .split("|")
+          .map((s) => s.trim())
+          .filter(Boolean);
+        let idx = 0;
+        const miss = img.parentElement.querySelector(".miss");
+        const tryNext = () => {
+          if (idx >= candidates.length) {
+            if (miss) miss.style.display = "block";
+            return;
+          }
+          img.src = candidates[idx++];
+        };
+        img.addEventListener("error", tryNext);
+        img.addEventListener("load", () => {
+          if (miss) miss.style.display = "none";
+        });
+        tryNext();
+      });
+    })();
+  </script>
 </body>
 </html>
-

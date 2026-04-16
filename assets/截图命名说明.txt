@@ -1,0 +1,12 @@
+请将四张 Week7 运行截图放到本目录，并使用以下文件名：
+
+1. week7_module1.png  （模块1：n-gram 与加一平滑）
+2. week7_module2.png  （模块2：Train your own RNN-LM）
+3. week7_module3.png  （模块3：Masked LM vs Causal LM）
+4. week7_module4.png  （模块4：Perplexity 困惑度）
+
+报告文件已引用上述固定文件名：
+- Week7_实验报告.md
+- Week7_实验报告_可视化.html
+
+只要文件名和路径一致，打开 HTML 报告即可显示四张截图，并可导出 PDF。
